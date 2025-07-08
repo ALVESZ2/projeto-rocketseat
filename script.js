@@ -7,6 +7,6 @@ const iaResponse = document.getElementById('iaResponse');
 
 const enviarForm =() => {
 
-}
+};
 
-form.addEventListener('submit', enviarForm) //"adicionar um ouvidor de eventos"
+form.addEventListener('submit', enviarForm); //"adicionar um ouvidor de eventos"
