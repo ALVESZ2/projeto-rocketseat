@@ -20,18 +20,25 @@
     <main>
         <section>
             <div>
-                <h2>Assistente de Meta</h2>
-                <p>Pergunte sobre estrategias, builds e dicas para seus jogos</p>
+                <h2> Assistente de Meta para Jogos</h2>
+                <p>Obtenha estratégias, builds, dicas práticas e recomendações atualizadas para seus jogos favoritos —
+                    Valorant, CS:GO, League of Legends, Free Fire, Minecraft, Wild Rift e muito mais.
+
+                    Faça perguntas específicas sobre mecânicas, posicionamento, táticas, configurações ou atualizações
+                    do meta. Receba respostas claras, objetivas e baseadas no patch mais recente — tudo sem informações
+                    inventadas.</p>
 
                 <form id="form">
-                    <input id="apiKey" type="password" placeholder="Informe a API KeY do Gemini" >
+                    <input id="apiKey" type="password" placeholder="Informe a API KeY do Gemini">
 
                     <select id="gameSelect">
                         <option value="">Selecione um jogo</option>
                         <option value="valorant">Valorant</option>
                         <option value="lol">League of Legends</option>
-                        <option value="cs">CS:GO</option>
+                        <option value="cs:go">CS:GO</option>
                         <option value="freefire">Free Fire</option>
+                        <option value="minecraft">Minecraft</option>
+                        <option value="wild rift">Wild Rift (LOL Mobile)</option>
                     </select>
                     <input type="text" id="questionInput" placeholder="Digite sua Pergunta!" required>
                     <button id="askButton">Perguntar</button>
@@ -39,7 +46,7 @@
 
                 <div id="iaResponse" class="hidden">
                     <div class="response-content">
-                    
+
                     </div>
                 </div>
             </div>

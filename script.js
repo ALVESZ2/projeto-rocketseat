@@ -1,4 +1,4 @@
-const apiKeyInput = document.getElementById('apiKey'); //document.querySelector('#apiKey')
+const apiKeyInput = document.getElementById('apiKey');
 const gameSelect = document.getElementById('gameSelect');
 const questionInput = document.getElementById('questionInput');
 const askButton = document.getElementById('askButton');
@@ -12,31 +12,37 @@ const markdownToHTML = (text) => {
 
 // AIzaSyDnVFkDayfTzYB_rynwGlsTfA6CxrNFsEk
 
-const perguntarIA = async (question, game, apiKey) => { // diz que algum passo da funcao precisara sair da aplicacao e ir para outra aplicacao e espera alguma resposta
+const perguntarIA = async (question, game, apiKey) => {
     const geminiModel = 'gemini-2.5-flash';
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${apiKey}`;
     const pergunta = `
         ## Especialidade
-        Você é um especialista assistente de Meta para o jogo ${game}
+            Você é um assistente especializado em estratégias, metas e mecânicas do jogo ${game}, com profundo conhecimento sobre suas dinâmicas, atualizações, versões e comunidade competitiva.
 
         ## Tarefa
-        Você deve responder às perguntas do usuário com base no seu conhecimento do jogo, estratégias, builds e dicas
+            Responda perguntas do usuário de forma objetiva, fundamentada e atualizada, fornecendo:
+            - Informações sobre mecânicas, táticas, estratégias, builds, configurações e dicas práticas.
+            - Recomendações baseadas no meta e nos patches mais recentes.
+            - Sugestões de melhorias, posicionamento ou técnicas avançadas, quando pertinente.
 
-        ## Regras
-        - Caso não saiba a resposta, limite-se a declarar ‘não sei’ e abstenha-se de formular informações imprecisas ou inventadas
-        - Caso a pergunta não tenha relação com o jogo, limite-se a responder: ‘Essa pergunta não está relacionada ao jogo’
-        - Considere a data atual ${new Date().toLocaleDateString()}
-        - Faca pesquisa atualizadas sobre o patch atual, baseado na data atual, para dar uma resposta coerente
-        - NUnca responda itens que voce nao tenha certeza de que existe na versao atual
+        ## Regras Gerais
+            - Se não souber a resposta com segurança, responda apenas: **“Não sei”**.
+            - Se a pergunta não tiver relação com o jogo, responda apenas: **“Essa pergunta não está relacionada ao jogo.”**
+            - Considere sempre a data atual: ${new Date().toLocaleDateString()}.
+            - Baseie suas respostas apenas em informações verificáveis e válidas na versão/patch atual.
+            - Evite qualquer resposta especulativa ou informação não confirmada.
 
-        ## Resposta
-        - Economize na resposa, seja direto e responda no maximo 500 caracteres
-        - responda em markdown
-        - Sem saudacoes ou despedida,apenas responda oq o usuario pede, como se ele estivesse lendo um manual
+        ## Padrão de Resposta
+            - Seja claro, preciso e direto ao ponto. Limite-se a **500 caracteres** sempre que possível.
+            - Responda em **Markdown**, para manter a formatação limpa e legível.
+            - **Não inclua saudações ou despedidas**. Responda como se fosse um trecho de manual técnico.
+            - Use listas ou tópicos apenas quando realmente necessário para clareza.
 
-        _____
-        Aqui esta a pergunta do usuario: ${question}
-    `
+        ---
+
+        ### Pergunta do usuário:
+            ${question}
+`
 
     const contents = [{
         role: "user",
@@ -67,6 +73,7 @@ const perguntarIA = async (question, game, apiKey) => { // diz que algum passo d
     return data.candidates[0].content.parts[0].text
 }
 
+
 const enviarForm = async (event) => {
     event.preventDefault();
 
@@ -83,21 +90,21 @@ const enviarForm = async (event) => {
     askButton.textContent = 'Perguntando...';
     askButton.classList.add('loading');
 
-    try {                                       //tentativa
+    try {
         const text = await perguntarIA(question, game, apiKey);
         iaResponse.querySelector('.response-content').innerHTML = markdownToHTML(text)
         iaResponse.classList.remove('hidden')
 
-    } catch (error) {                            
+    } catch (error) {
         console.error('Error: ', error);
         iaResponse.querySelector('.response-content').innerHTML =
             '<p style="color:red;">Erro ao obter resposta da IA. Tente novamente mais tarde.</p>';
         iaResponse.classList.remove('hidden');
-    } finally {                                 
+    } finally {
         askButton.disabled = false;
         askButton.textContent = 'Perguntar';
         askButton.classList.remove('loading')
     }
 };
 
-form.addEventListener('submit', enviarForm); //"adicionar um ouvidor de eventos"
+form.addEventListener('submit', enviarForm);
