@@ -8,11 +8,11 @@ const iaResponse = document.getElementById('iaResponse');
 const markdownToHTML = (text) => {
     const converter = new showdown.Converter();
     return converter.makeHtml(text)
-} 
+}
 
 // AIzaSyDnVFkDayfTzYB_rynwGlsTfA6CxrNFsEk
 
-const perguntarIA = async (question, game, apiKey) =>{ // diz que algum passo da funcao precisara sair da aplicacao e ir para outra aplicacao e espera alguma resposta
+const perguntarIA = async (question, game, apiKey) => { // diz que algum passo da funcao precisara sair da aplicacao e ir para outra aplicacao e espera alguma resposta
     const geminiModel = 'gemini-2.5-flash';
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${apiKey}`;
     const pergunta = `
@@ -58,7 +58,7 @@ const perguntarIA = async (question, game, apiKey) =>{ // diz que algum passo da
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            contents, 
+            contents,
             tools
         })
     })
@@ -74,9 +74,7 @@ const enviarForm = async (event) => {
     const game = gameSelect.value;
     const question = questionInput.value;
 
-    console.log({apiKey, game, question})
-
-    if(apiKey == '' || game == '' || question ==""){
+    if (apiKey == '' || game == '' || question == "") {
         alert('Por favor, preencha todos os campos')
         return
     }
@@ -85,15 +83,18 @@ const enviarForm = async (event) => {
     askButton.textContent = 'Perguntando...';
     askButton.classList.add('loading');
 
-    try{                                       //tentativa
-        const text = await perguntarIA(question, game , apiKey);
+    try {                                       //tentativa
+        const text = await perguntarIA(question, game, apiKey);
         iaResponse.querySelector('.response-content').innerHTML = markdownToHTML(text)
         iaResponse.classList.remove('hidden')
 
-    } catch(error){                            // Funcao que se tiver, captura o erro e faz executa algo
-        console.log('Error: ', error)
-    }finally{                                  // Se der certo ou errado, faz alguma coisa
-        askButton.disabled == false;
+    } catch (error) {                            
+        console.error('Error: ', error);
+        iaResponse.querySelector('.response-content').innerHTML =
+            '<p style="color:red;">Erro ao obter resposta da IA. Tente novamente mais tarde.</p>';
+        iaResponse.classList.remove('hidden');
+    } finally {                                 
+        askButton.disabled = false;
         askButton.textContent = 'Perguntar';
         askButton.classList.remove('loading')
     }
